@@ -112,7 +112,7 @@ resource "azurerm_monitor_log_profile" "subscription" {
 }
 
 module "log-analytics-workspace" {
-  source              = "ssh://git@scm.dazzlingwrench.fxinnovation.com:2222/fxinnovation-public/terraform-module-azurerm-log-analytics-workspace.git?ref=0.2.0"
+  source              = "git::ssh://git@scm.dazzlingwrench.fxinnovation.com:2222/fxinnovation-public/terraform-module-azurerm-log-analytics-workspace.git?ref=0.2.0"
   enabled             = var.enabled ? true : false
   location            = var.location
   resource_group_name = data.azurerm_resource_group.rg.name
