@@ -12,8 +12,8 @@ This module is used to deploy multiple resources (storage account, event hub and
 | enabled | Enable or disable module. | bool | `"true"` | no |
 | event\_hub\_namespace\_name | Name of the event hub namespace to be used as a target for the logs. | string | n/a | yes |
 | location | Location where the resources will be deployed. | string | `""` | no |
-| log\_analytics\_workspace\_name | Number of days the workspace to deploy will retain logs. | number | `"7"` | no |
 | log\_analytics\_workspace\_name | Name of the workspace to deploy to be used for logging. | string | n/a | yes |
+| log\_analytics\_workspace\_retention\_in\_days | Number of days the workspace to deploy will retain logs. | number | `"7"` | no |
 | log\_analytics\_workspace\_sku | SKU of the workspace to deploy to be used for logging. | string | `"free"` | no |
 | resource\_group\_name | Name of the resource group where the resource will be deployed. | string | n/a | yes |
 | storage\_account\_name | Name of the storage account to be used to host the logs. | string | n/a | yes |
@@ -25,6 +25,9 @@ This module is used to deploy multiple resources (storage account, event hub and
 | Name | Description |
 |------|-------------|
 | diagnostics\_map |  |
+| log\_analytics\_primary\_shared\_key |  |
+| log\_analytics\_secondary\_shared\_key |  |
+| log\_analytics\_workspace\_id |  |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
