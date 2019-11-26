@@ -39,7 +39,7 @@ variable "tags" {
 variable "storage_account_name" {
   description = "Name of the storage account to be used to host the logs."
   type        = string
-  default     = "fxcozca1dgensa005"
+  default     = "fxcozca1dgensa006"
 }
 
 variable "event_hub_namespace_name" {

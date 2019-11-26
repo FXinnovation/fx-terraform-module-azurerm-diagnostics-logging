@@ -1,8 +1,8 @@
 output "diagnostics_map" {
   value = map(
-    "diags_sa", azurerm_storage_account.this.id,
-    "eh_name", azurerm_eventhub_namespace.this.name,
-    "eh_id", azurerm_eventhub_namespace.this.id,
+    "diags_sa", azurerm_storage_account.this[0].id,
+    "eh_name", azurerm_eventhub_namespace.this[0].name,
+    "eh_id", azurerm_eventhub_namespace.this[0].id,
     "la_name", var.log_analytics_workspace_name,
     "la_id", module.log-analytics-workspace.id,
     "la_work_id", module.log-analytics-workspace.workspace_id

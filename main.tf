@@ -29,13 +29,12 @@ resource "azurerm_storage_account" "this" {
 
 resource "azurerm_eventhub_namespace" "this" {
   count                = var.enabled ? 1 : 0
-  location             = var.location
+  location             = local.location
   resource_group_name  = data.azurerm_resource_group.rg.name
   name                 = var.event_hub_namespace_name
   sku                  = "Standard"
   capacity             = 2
   auto_inflate_enabled = false
-  kafka_enabled        = true
   tags = merge(
     {
       "Terraform" = "true"
@@ -103,18 +102,18 @@ resource "azurerm_monitor_log_profile" "subscription" {
 
   # RootManageSharedAccessKey is created by default with listen, send, manage permissions
   servicebus_rule_id = "${azurerm_eventhub_namespace.this[0].id}/authorizationrules/RootManageSharedAccessKey"
-  storage_account_id = azurerm_storage_account.this.id
+  storage_account_id = azurerm_storage_account.this[0].id
 
   retention_policy {
     enabled = true
-    days    = var.subscription_logs_rentention
+    days    = var.subscription_logs_retention
   }
 }
 
 module "log-analytics-workspace" {
   source              = "git::ssh://git@scm.dazzlingwrench.fxinnovation.com:2222/fxinnovation-public/terraform-module-azurerm-log-analytics-workspace.git?ref=0.2.0"
   enabled             = var.enabled ? true : false
-  location            = var.location
+  location            = local.location
   resource_group_name = data.azurerm_resource_group.rg.name
   name                = var.log_analytics_workspace_name
   sku                 = var.log_analytics_workspace_sku

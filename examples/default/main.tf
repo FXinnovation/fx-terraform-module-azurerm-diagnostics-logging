@@ -12,4 +12,5 @@ module "az-diagnostics-demo" {
   event_hub_namespace_name     = var.event_hub_namespace_name
   subscription_logs_retention  = var.subscription_logs_retention
   log_analytics_workspace_name = var.log_analytics_workspace_name
+  tags                         = var.tags
 }
