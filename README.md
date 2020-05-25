@@ -2,7 +2,7 @@
 
 ## Usage
 
-This module is used to deploy multiple resources (storage account, event hub and log analytics workspace) that will be used for the gathering of diagnostic informations and logging.
+This module is used to deploy multiple resources (storage account,log analytics workspace) that will be used for the gathering of diagnostic informations and logging.
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
