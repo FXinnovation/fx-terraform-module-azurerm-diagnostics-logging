@@ -1,127 +1,94 @@
-data "azurerm_resource_group" "rg" {
-  name = var.resource_group_name
-}
+###
+# Storage account
+###
 
-locals {
-  location = var.location == "" ? data.azurerm_resource_group.rg.location : var.location
-}
+module "storage_account" {
+  source = "git::https://scm.dazzlingwrench.fxinnovation.com/fxinnovation-public/terraform-module-azurerm-storage-account.git?ref=1.0.0"
 
-#Defines the subscription-wide logging and eventing settings
-#Creating the containers on Storage Account and Event Hub (optional)
+  enabled                   = var.enabled && var.storage_account_exist == false
+  storage_account_name      = var.storage_account_name
+  resource_group_name       = var.resource_group_name
+  location                  = var.location
+  account_tier              = var.account_tier
+  account_replication_type  = var.account_replication_type
+  enable_https_traffic_only = var.enable_https_traffic_only
 
-resource "azurerm_storage_account" "this" {
-  count                     = var.enabled ? 1 : 0
-  location                  = local.location
-  resource_group_name       = data.azurerm_resource_group.rg.name
-  name                      = var.storage_account_name
-  account_kind              = "StorageV2"
-  account_tier              = "Standard"
-  account_replication_type  = "GRS"
-  access_tier               = "Hot"
-  enable_https_traffic_only = true
+  storage_containers = var.storage_containers
+  storage_shares     = []
+
   tags = merge(
-    {
-      "Terraform" = "true"
-    },
     var.tags,
+    var.storage_account_tags
   )
 }
 
-resource "azurerm_eventhub_namespace" "this" {
-  count                = var.enabled ? 1 : 0
-  location             = local.location
-  resource_group_name  = data.azurerm_resource_group.rg.name
-  name                 = var.event_hub_namespace_name
-  sku                  = "Standard"
-  capacity             = 2
-  auto_inflate_enabled = false
-  tags = merge(
-    {
-      "Terraform" = "true"
-    },
-    var.tags,
-  )
-}
+###
+# Log analytics workspace
+###
 
-resource "azurerm_monitor_log_profile" "subscription" {
-  count = var.enabled ? 1 : 0
-  name  = "default"
+module "log_analytics_workspace" {
+  source = "git::https://scm.dazzlingwrench.fxinnovation.com/fxinnovation-public/terraform-module-azurerm-log-analytics-workspace.git?ref=1.0.0"
 
-  categories = [
-    "Action",
-    "Delete",
-    "Write"
-  ]
-
-  # Add all regions - > put in variable
-  # az account list-locations --query '[].name'
-  # updated Nov 08 2019
-  locations = [
-    "global",
-    "eastasia",
-    "southeastasia",
-    "centralus",
-    "eastus",
-    "eastus2",
-    "westus",
-    "northcentralus",
-    "southcentralus",
-    "northeurope",
-    "westeurope",
-    "japanwest",
-    "japaneast",
-    "brazilsouth",
-    "australiaeast",
-    "australiasoutheast",
-    "southindia",
-    "centralindia",
-    "westindia",
-    "canadacentral",
-    "canadaeast",
-    "uksouth",
-    "ukwest",
-    "westcentralus",
-    "westus2",
-    "koreacentral",
-    "koreasouth",
-    "francecentral",
-    "francesouth",
-    "australiacentral",
-    "australiacentral2",
-    "uaecentral",
-    "uaenorth",
-    "southafricanorth",
-    "southafricawest",
-    "switzerlandnorth",
-    "switzerlandwest",
-    "germanynorth",
-    "germanywestcentral",
-    "norwaywest",
-    "norwayeast"
-  ]
-
-  # RootManageSharedAccessKey is created by default with listen, send, manage permissions
-  servicebus_rule_id = "${azurerm_eventhub_namespace.this[0].id}/authorizationrules/RootManageSharedAccessKey"
-  storage_account_id = azurerm_storage_account.this[0].id
-
-  retention_policy {
-    enabled = true
-    days    = var.subscription_logs_retention
-  }
-}
-
-module "log-analytics-workspace" {
-  source              = "git::ssh://git@scm.dazzlingwrench.fxinnovation.com:2222/fxinnovation-public/terraform-module-azurerm-log-analytics-workspace.git?ref=0.2.0"
-  enabled             = var.enabled ? true : false
-  location            = local.location
-  resource_group_name = data.azurerm_resource_group.rg.name
+  enabled             = var.enabled && var.workspace_exist == false
   name                = var.log_analytics_workspace_name
-  sku                 = var.log_analytics_workspace_sku
-  retention_in_days   = var.log_analytics_workspace_retention_in_days
+  location            = var.resource_group_location
+  resource_group_name = var.resource_group_name
+  sku                 = var.workspace_sku
+  retention_in_days   = var.retention_in_days
   tags = merge(
-    {
-      "Terraform" = "true"
-    },
     var.tags,
+    var.log_analytics_workspace_tags
   )
+}
+
+
+
+###
+# Diagnostics settings
+###
+
+resource "azurerm_monitor_diagnostic_setting" "this" {
+  count = var.enabled ? var.diagnostics_count : 0
+
+  name                           = element(var.names, count.index)
+  target_resource_id             = element(var.target_resource_ids, count.index)
+  log_analytics_workspace_id     = var.workspace_exist != false ? data.azurerm_log_analytics_workspace.this[0].id : module.log_analytics_workspace.id
+  log_analytics_destination_type = var.log_analytics_destination_type
+  storage_account_id             = var.storage_account_exist != false ? data.azurerm_storage_account.this[0].id : module.storage_account.id
+
+  dynamic "log" {
+    for_each = var.logs
+
+    content {
+      category = lookup(log.value, "category", null)
+      enabled  = lookup(log.value, "enabled", true)
+
+      dynamic "retention_policy" {
+        for_each = log.value.retention_policy
+
+        content {
+          enabled = retention_policy.value.enabled
+          days    = retention_policy.value.days
+        }
+      }
+    }
+  }
+
+  dynamic "metric" {
+    for_each = var.metrics
+
+    content {
+      category = lookup(metric.value, "category", null)
+      enabled  = lookup(metric.value, "enabled", true)
+
+      dynamic "retention_policy" {
+        for_each = metric.value.retention_policy
+
+        content {
+          enabled = retention_policy.value.enabled
+          days    = retention_policy.value.days
+        }
+      }
+    }
+  }
 }

@@ -1,24 +1,35 @@
-output "diagnostics_map" {
-  value = map(
-    "diags_sa", azurerm_storage_account.this[0].id,
-    "eh_name", azurerm_eventhub_namespace.this[0].name,
-    "eh_id", azurerm_eventhub_namespace.this[0].id,
-    "la_name", var.log_analytics_workspace_name,
-    "la_id", module.log-analytics-workspace.id,
-    "la_work_id", module.log-analytics-workspace.workspace_id
-  )
+###
+# Diagnostic setting
+###
+
+output "id" {
+  description = "ID of the diagnostics setting."
+  value       = element(concat(azurerm_monitor_diagnostic_setting.this.*.id, list("")), 0)
 }
+
+###
+# Storage account
+###
+
+output "storage_account_id" {
+  description = "The ID of the storage account."
+  value       = module.storage_account.id
+}
+
+###
+# Log analytics workspace
+###
 
 output "log_analytics_primary_shared_key" {
   sensitive = true
-  value     = module.log-analytics-workspace.primary_shared_key
+  value     = module.log_analytics_workspace.primary_shared_key
 }
 
 output "log_analytics_secondary_shared_key" {
   sensitive = true
-  value     = module.log-analytics-workspace.secondary_shared_key
+  value     = module.log_analytics_workspace.secondary_shared_key
 }
 
 output "log_analytics_workspace_id" {
-  value = module.log-analytics-workspace.workspace_id
+  value = module.log_analytics_workspace.workspace_id
 }
