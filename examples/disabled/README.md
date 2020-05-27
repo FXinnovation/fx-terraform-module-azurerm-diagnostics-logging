@@ -9,10 +9,7 @@ No requirements.
 
 ## Providers
 
-| Name | Version |
-|------|---------|
-| azurerm | n/a |
-| random | n/a |
+No provider.
 
 ## Inputs
 

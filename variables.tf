@@ -140,7 +140,7 @@ variable "logs" {
   For example, see folder example/default folder.
   DOCUMENTATION
   type        = list
-  default     = [[]]
+  default     = []
 
 }
 
@@ -155,17 +155,19 @@ variable "metrics" {
   For example, see folder example/default folder.
   DOCUMENTATION
   type        = list
-  default = [[
-    {
-      category = "AllMetrics"
-      enabled  = true
+  default = [
+    [
+      {
+        category = "AllMetrics"
+        enabled  = true
 
-      retention_policy = [
-        {
-          enabled = false
-          days    = 2
-        }
-      ]
-    }
-  ]]
+        retention_policy = [
+          {
+            enabled = false
+            days    = 2
+          }
+        ]
+      }
+    ]
+  ]
 }
