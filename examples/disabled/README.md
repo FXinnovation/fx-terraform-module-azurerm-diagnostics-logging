@@ -1,6 +1,6 @@
-# Default example
+# Disabled example
 
-This will create some basic resource related to the diasgnostic settings.
+This will not create any resource.
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
@@ -9,7 +9,10 @@ No requirements.
 
 ## Providers
 
-No provider.
+| Name | Version |
+|------|---------|
+| azurerm | n/a |
+| random | n/a |
 
 ## Inputs
 

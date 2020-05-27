@@ -8,13 +8,13 @@ module "storage_account" {
   enabled                   = var.enabled && var.storage_account_exist == false
   storage_account_name      = var.storage_account_name
   resource_group_name       = var.resource_group_name
-  location                  = var.location
+  location                  = var.resource_group_location
   account_tier              = var.account_tier
   account_replication_type  = var.account_replication_type
   enable_https_traffic_only = var.enable_https_traffic_only
 
   storage_containers = var.storage_containers
-  storage_shares     = []
+  storage_shares     = var.storage_shares
 
   tags = merge(
     var.tags,
@@ -53,11 +53,11 @@ resource "azurerm_monitor_diagnostic_setting" "this" {
   name                           = element(var.names, count.index)
   target_resource_id             = element(var.target_resource_ids, count.index)
   log_analytics_workspace_id     = var.workspace_exist != false ? data.azurerm_log_analytics_workspace.this[0].id : module.log_analytics_workspace.id
-  log_analytics_destination_type = var.log_analytics_destination_type
+  log_analytics_destination_type = element(var.log_analytics_destination_type, count.index)
   storage_account_id             = var.storage_account_exist != false ? data.azurerm_storage_account.this[0].id : module.storage_account.id
 
   dynamic "log" {
-    for_each = var.logs
+    for_each = var.logs[count.index]
 
     content {
       category = lookup(log.value, "category", null)
@@ -75,7 +75,7 @@ resource "azurerm_monitor_diagnostic_setting" "this" {
   }
 
   dynamic "metric" {
-    for_each = var.metrics
+    for_each = var.metrics[count.index]
 
     content {
       category = lookup(metric.value, "category", null)

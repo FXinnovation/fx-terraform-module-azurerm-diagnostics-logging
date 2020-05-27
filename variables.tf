@@ -48,7 +48,7 @@ variable "account_replication_type" {
   default     = "LRS"
 }
 
-variable "enable_https_tarffic_only" {
+variable "enable_https_traffic_only" {
   description = "Boolean flag which forces HTTPS if enabled."
   default     = true
 }
@@ -57,6 +57,12 @@ variable "storage_containers" {
   description = "List of containers to create and their access levels."
   default     = []
   type        = list(object({ name = string, access_type = string }))
+}
+
+variable "storage_shares" {
+  description = "List of share to create"
+  default     = []
+  type        = list(object({ name = string, quota = string }))
 }
 
 variable "storage_account_tags" {
@@ -91,7 +97,7 @@ variable "retention_in_days" {
   default     = 7
 }
 
-variable "log_analytics_tags" {
+variable "log_analytics_workspace_tags" {
   description = "Tags which will be associated to the log analytics workspace."
   default     = {}
 }
@@ -117,7 +123,7 @@ variable "target_resource_ids" {
   default     = [""]
 }
 
-variable "log_analytics_detination_type" {
+variable "log_analytics_destination_type" {
   description = "when set to `Dedicated  logs sent to a log analytics workspace will go into resource specific tables, instead of the legacy Azurediagnostics table. Note: This setting will only have an effect if a  `log_analytics_workspace_id` is provided, and the resource is avaliable for resource-specific logs."
   type        = list(string)
   default     = [""]
@@ -134,10 +140,11 @@ variable "logs" {
   For example, see folder example/default folder.
   DOCUMENTATION
   type        = list
-  default     = []
+  default     = [[]]
+
 }
 
-variable "metric" {
+variable "metrics" {
   description = <<-DOCUMENTATION
   A list of list of map of options to apply. Map must support the following structure:
     * category(required, string): The name of a diagnostic log category for the resource. Note: The metric categories available vary depending on the resource begin used. You may wish to use `azurerm_monitor_diagnostc_catehories` data source to identify which categories are available for a given resource.
@@ -148,5 +155,17 @@ variable "metric" {
   For example, see folder example/default folder.
   DOCUMENTATION
   type        = list
-  default     = []
+  default = [[
+    {
+      category = "AllMetrics"
+      enabled  = true
+
+      retention_policy = [
+        {
+          enabled = false
+          days    = 2
+        }
+      ]
+    }
+  ]]
 }
