@@ -67,7 +67,7 @@ resource "azurerm_windows_virtual_machine" "example" {
 
 
 module "example" {
-  source = "../"
+  source = "../.."
 
   resource_group_name       = module.resource_group_demo.name
   resource_group_location   = module.resource_group_demo.location
