@@ -17,7 +17,7 @@ variable "resource_group_name" {
 }
 
 variable "tags" {
-  description = "Tags shared by all resource of tis module. Will be merged with any other specific tags by resource."
+  description = "Tags shared by all resource of this module. Will be merged with any other specific tags by resource."
   default     = {}
 }
 
@@ -26,7 +26,7 @@ variable "tags" {
 ###
 
 variable "storage_account_exist" {
-  description = "Boolean flag which describes whhether the storage account is already existing or not."
+  description = "Boolean flag which describes whether the storage account is already existing or not."
   default     = false
 }
 
@@ -66,7 +66,7 @@ variable "storage_shares" {
 }
 
 variable "storage_account_tags" {
-  description = "Tags which will specifically assigned to the storage account."
+  description = "Tags which will be specifically assigned to the storage account."
   default     = {}
 }
 
@@ -75,7 +75,7 @@ variable "storage_account_tags" {
 ###
 
 variable "workspace_exist" {
-  description = "Boolean flag which describes whhether the log analytics workspace is already existing or not."
+  description = "Boolean flag which describes whether the log analytics workspace is already existing or not."
   default     = false
 }
 
@@ -119,12 +119,6 @@ variable "names" {
 
 variable "target_resource_ids" {
   description = "The list of IDs of an existing resource on which to configure diagnostic settings. Changing this forces a new resource to be created."
-  type        = list(string)
-  default     = [""]
-}
-
-variable "log_analytics_destination_type" {
-  description = "when set to `Dedicated  logs sent to a log analytics workspace will go into resource specific tables, instead of the legacy Azurediagnostics table. Note: This setting will only have an effect if a  `log_analytics_workspace_id` is provided, and the resource is avaliable for resource-specific logs."
   type        = list(string)
   default     = [""]
 }

@@ -99,5 +99,4 @@ module "example" {
       }
     ]
   ]
-  log_analytics_destination_type = ["Dedicated"]
 }

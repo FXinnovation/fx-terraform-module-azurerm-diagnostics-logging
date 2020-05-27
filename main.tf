@@ -50,11 +50,10 @@ module "log_analytics_workspace" {
 resource "azurerm_monitor_diagnostic_setting" "this" {
   count = var.enabled ? var.diagnostics_count : 0
 
-  name                           = element(var.names, count.index)
-  target_resource_id             = element(var.target_resource_ids, count.index)
-  log_analytics_workspace_id     = var.workspace_exist != false ? data.azurerm_log_analytics_workspace.this[0].id : module.log_analytics_workspace.id
-  log_analytics_destination_type = element(var.log_analytics_destination_type, count.index)
-  storage_account_id             = var.storage_account_exist != false ? data.azurerm_storage_account.this[0].id : module.storage_account.id
+  name                       = element(var.names, count.index)
+  target_resource_id         = element(var.target_resource_ids, count.index)
+  log_analytics_workspace_id = var.workspace_exist != false ? data.azurerm_log_analytics_workspace.this[0].id : module.log_analytics_workspace.id
+  storage_account_id         = var.storage_account_exist != false ? data.azurerm_storage_account.this[0].id : module.storage_account.id
 
   dynamic "log" {
     for_each = var.logs[count.index]
