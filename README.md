@@ -10,13 +10,13 @@ This module is used to deploy multiple resources (storage account,log analytics 
 | Name | Version |
 |------|---------|
 | terraform | >= 0.12 |
-| azurerm | >= 2.0.0 |
+| azurerm | ~> 2.0.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| azurerm | >= 2.0.0 |
+| azurerm | ~> 2.0.0 |
 
 ## Inputs
 

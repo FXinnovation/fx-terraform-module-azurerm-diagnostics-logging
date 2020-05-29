@@ -41,8 +41,6 @@ module "log_analytics_workspace" {
   )
 }
 
-
-
 ###
 # Diagnostics settings
 ###
