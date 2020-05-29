@@ -10,8 +10,8 @@ module "resource_group_demo" {
   name     = "tftest${random_string.this.result}"
 
   tags = {
-    managed_by = "Terraform"
-    EndDate    = "2020-05-25"
+    Owner   = "Terraform"
+    EndDate = "2020-05-25"
   }
 }
 
