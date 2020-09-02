@@ -13,7 +13,7 @@ output "id" {
 
 output "storage_account_id" {
   description = "The ID of the storage account."
-  value       = module.storage_account.id
+  value       = var.export_to_sa != false ? module.storage_account.id : null
 }
 
 ###
@@ -22,14 +22,14 @@ output "storage_account_id" {
 
 output "log_analytics_primary_shared_key" {
   sensitive = true
-  value     = module.log_analytics_workspace.primary_shared_key
+  value     = var.export_to_law != false ? module.log_analytics_workspace.primary_shared_key : null
 }
 
 output "log_analytics_secondary_shared_key" {
   sensitive = true
-  value     = module.log_analytics_workspace.secondary_shared_key
+  value     = var.export_to_law != false ? module.log_analytics_workspace.secondary_shared_key : null
 }
 
 output "log_analytics_workspace_id" {
-  value = module.log_analytics_workspace.workspace_id
+  value = var.export_to_law != false ? module.log_analytics_workspace.workspace_id : null
 }
