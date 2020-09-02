@@ -50,7 +50,7 @@ resource "azurerm_monitor_diagnostic_setting" "this" {
 
   name                       = element(var.names, count.index)
   target_resource_id         = element(var.target_resource_ids, count.index)
-  log_analytics_workspace_id = var.export_to_law != false ? (var.workspace_exist != false ? data.azurerm_log_analytics_workspace.this[0].id : module.log_analytics_workspace.id) : null  
+  log_analytics_workspace_id = var.export_to_law != false ? (var.workspace_exist != false ? data.azurerm_log_analytics_workspace.this[0].id : module.log_analytics_workspace.id) : null
   storage_account_id         = var.export_to_sa != false ? (var.storage_account_exist != false ? data.azurerm_storage_account.this[0].id : module.storage_account.id) : null
 
   dynamic "log" {
