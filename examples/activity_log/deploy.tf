@@ -18,8 +18,8 @@ module "resource_group_demo" {
 module "example" {
   source = "../.."
 
-  resource_group_name       = module.resource_group_demo.name
-  resource_group_location   = module.resource_group_demo.location
+  resource_group_name     = module.resource_group_demo.name
+  resource_group_location = module.resource_group_demo.location
 
   log_analytics_workspace_name = "tftest${random_string.this.result}"
   workspace_sku                = "free"
@@ -28,7 +28,7 @@ module "example" {
   diagnostics_count   = 1
   names               = ["tftest${random_string.this.result}"]
   target_resource_ids = [data.azurerm_subscription.this.id]
-  logs                = [
+  logs = [
     [
       {
         category = "Administrative"
