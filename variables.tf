@@ -111,6 +111,16 @@ variable "diagnostics_count" {
   default     = 1
 }
 
+variable "export_to_law" {
+  description = "Allow export of logs and/or metrics to a Log Analytics Workspace."
+  default     = true
+}
+
+variable "export_to_sa" {
+  description = "Allow export of logs and/or metrics to a Storage Account."
+  default     = false
+}
+
 variable "names" {
   description = "List which specifies the names of the diagnostics settings. Changing this forces a new resource to be created."
   type        = list(string)
