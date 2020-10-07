@@ -1,6 +1,6 @@
-# Default example
+# Activity log example
 
-This will create some basic resource related to the diasgnostic settings.
+This will create basic mertic resources related to the diasgnostic settings.
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
