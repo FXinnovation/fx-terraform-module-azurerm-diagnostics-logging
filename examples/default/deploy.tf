@@ -5,7 +5,7 @@ resource "random_string" "this" {
 }
 
 module "resource_group_demo" {
-  source   = "git::https://scm.dazzlingwrench.fxinnovation.com/fxinnovation-public/terraform-module-azurerm-resource-group.git?ref=1.0.0"
+  source   = "git::https://github.com/FXinnovation/fx-terraform-module-azurerm-resource-group.git?ref=1.0.0"
   location = "francecentral"
   name     = "tftest${random_string.this.result}"
 

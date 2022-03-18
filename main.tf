@@ -3,7 +3,7 @@
 ###
 
 module "storage_account" {
-  source = "git::https://scm.dazzlingwrench.fxinnovation.com/fxinnovation-public/terraform-module-azurerm-storage-account.git?ref=1.0.0"
+  source = "git::https://github.com/FXinnovation/fx-terraform-module-azurerm-storage-account.git?ref=1.0.0"
 
   enabled                   = var.enabled && var.storage_account_exist == false
   storage_account_name      = var.storage_account_name
@@ -27,7 +27,7 @@ module "storage_account" {
 ###
 
 module "log_analytics_workspace" {
-  source = "git::https://scm.dazzlingwrench.fxinnovation.com/fxinnovation-public/terraform-module-azurerm-log-analytics-workspace.git?ref=1.0.0"
+  source = "git::https://github.com/FXinnovation/fx-terraform-module-azurerm-log-analytics-workspace.git?ref=1.0.0"
 
   enabled             = var.enabled && var.workspace_exist == false
   name                = var.log_analytics_workspace_name
